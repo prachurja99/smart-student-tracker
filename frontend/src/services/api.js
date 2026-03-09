@@ -26,6 +26,13 @@ export const approveTeacher = (id) => API.put(`/admin/approve-teacher/${id}`);
 export const rejectTeacher = (id) => API.put(`/admin/reject-teacher/${id}`);
 export const getAllUsers = () => API.get('/admin/all-users');
 export const getAllStudents = () => API.get('/admin/all-students');
-
+export const createSection = (data) => API.post('/sections', data);
+export const getAllSections = () => API.get('/sections');
+export const assignTeacherToSection = (sectionId, teacherId) => API.put(`/sections/${sectionId}/assign-teacher`, { teacherId });
+export const assignStudentToSection = (sectionId, studentId) => API.post(`/sections/${sectionId}/assign-student`, { studentId });
+export const removeStudentFromSection = (sectionId, studentId) => API.delete(`/sections/${sectionId}/remove-student/${studentId}`);
+export const getMyStudents = () => API.get('/sections/my-students');
+export const promoteToAdmin = (id) => API.put(`/admin/promote/${id}`);
+export const getMySection = () => API.get('/sections/my-section');
 
 export default API;

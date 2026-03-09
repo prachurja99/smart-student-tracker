@@ -86,4 +86,27 @@ const getAllStudents = async (req, res) => {
   }
 };
 
-module.exports = { getPendingTeachers, approveTeacher, rejectTeacher, getAllUsers, getAllStudents };
+// @route   PUT /api/admin/promote/:id
+// @access  Private - Admin only
+const promoteToAdmin = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const user = await User.findByPk(id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    if (user.id === req.user.id) {
+      return res.status(400).json({ message: 'You cannot change your own role' });
+    }
+
+    await user.update({ role: 'admin', status: 'active' });
+
+    res.status(200).json({ message: 'User promoted to admin successfully', user });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+module.exports = { getPendingTeachers, approveTeacher, rejectTeacher, getAllUsers, getAllStudents, promoteToAdmin };

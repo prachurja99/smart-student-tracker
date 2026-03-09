@@ -6,6 +6,7 @@ const {
   rejectTeacher,
   getAllUsers,
   getAllStudents,
+  promoteToAdmin,
 } = require('../controllers/adminController');
 const { protect, authorize } = require('../middleware/authMiddleware');
 
@@ -14,5 +15,6 @@ router.put('/approve-teacher/:id', protect, authorize('admin'), approveTeacher);
 router.put('/reject-teacher/:id', protect, authorize('admin'), rejectTeacher);
 router.get('/all-users', protect, authorize('admin'), getAllUsers);
 router.get('/all-students', protect, authorize('teacher', 'admin'), getAllStudents);
+router.put('/promote/:id', protect, authorize('admin'), promoteToAdmin);
 
 module.exports = router;
