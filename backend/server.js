@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const { connectPostgres } = require('./config/postgres');
 const connectMongo = require('./config/mongo');
+require('./models/Grade');
 
 const app = express();
 
@@ -12,6 +13,7 @@ app.use(express.json());
 
 // Routes
 app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/grades', require('./routes/gradeRoutes'));
 
 // Health check
 app.get('/', (req, res) => {
