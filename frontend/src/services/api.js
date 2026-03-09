@@ -25,6 +25,7 @@ export const getPendingTeachers = () => API.get('/admin/pending-teachers');
 export const approveTeacher = (id) => API.put(`/admin/approve-teacher/${id}`);
 export const rejectTeacher = (id) => API.put(`/admin/reject-teacher/${id}`);
 export const getAllUsers = () => API.get('/admin/all-users');
+export const getAllStudents = () => API.get('/admin/all-students');
 
 
 export default API;

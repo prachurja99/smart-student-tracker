@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { createGrade, updateGrade, deleteGrade, getGradesByStudent, getStudentAnalytics } from '../../services/api';
+import { createGrade, updateGrade, deleteGrade, getGradesByStudent, getStudentAnalytics, getAllStudents } from '../../services/api';
 import Navbar from '../../components/layout/Navbar';
 import { SubjectBarChart, GradeTrendChart } from '../../components/dashboard/GradeChart';
 import { Plus, Pencil, Trash2, X, Check, Users, BookOpen, TrendingUp, Award } from 'lucide-react';
@@ -26,9 +26,10 @@ const TeacherDashboard = () => {
   const [success, setSuccess] = useState('');
   const [showForm, setShowForm] = useState(false);
   const [editingGrade, setEditingGrade] = useState(null);
-  const [studentId, setStudentId] = useState('2');
+  const [studentId, setStudentId] = useState('');
+  const [students, setStudents] = useState([]);
+  const [selectedStudent, setSelectedStudent] = useState(null);
   const [form, setForm] = useState({
-    studentId: '2',
     subject: '',
     score: '',
     maxScore: '100',
@@ -37,8 +38,19 @@ const TeacherDashboard = () => {
     remarks: '',
   });
 
+  const fetchStudents = async () => {
+    try {
+      const res = await getAllStudents();
+      setStudents(res.data.students);
+    } catch {
+      setError('Failed to load students');
+    }
+  };
+
   const fetchGrades = async () => {
+    if (!studentId) return;
     setLoading(true);
+    setError('');
     try {
       const [gradesRes, analyticsRes] = await Promise.all([
         getGradesByStudent(studentId),
@@ -54,7 +66,11 @@ const TeacherDashboard = () => {
   };
 
   useEffect(() => {
-    fetchGrades();
+    fetchStudents();
+  }, []);
+
+  useEffect(() => {
+    if (studentId) fetchGrades();
   }, [studentId]);
 
   const handleChange = (e) => {
@@ -75,7 +91,7 @@ const TeacherDashboard = () => {
       }
       setShowForm(false);
       setEditingGrade(null);
-      setForm({ studentId, subject: '', score: '', maxScore: '100', term: '', examDate: '', remarks: '' });
+      setForm({ subject: '', score: '', maxScore: '100', term: '', examDate: '', remarks: '' });
       fetchGrades();
     } catch (err) {
       setError(err.response?.data?.message || 'Something went wrong');
@@ -85,7 +101,6 @@ const TeacherDashboard = () => {
   const handleEdit = (grade) => {
     setEditingGrade(grade);
     setForm({
-      studentId: grade.studentId,
       subject: grade.subject,
       score: grade.score,
       maxScore: grade.maxScore,
@@ -119,7 +134,8 @@ const TeacherDashboard = () => {
           </div>
           <button
             onClick={() => { setShowForm(!showForm); setEditingGrade(null); }}
-            className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+            disabled={!studentId}
+            className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Plus size={18} />
             Add Grade
@@ -129,21 +145,39 @@ const TeacherDashboard = () => {
         {error && <div className="bg-red-100 text-red-700 p-3 rounded-lg mb-4">{error}</div>}
         {success && <div className="bg-green-100 text-green-700 p-3 rounded-lg mb-4">{success}</div>}
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-6 flex items-center gap-4">
-          <label className="text-sm font-medium text-gray-700">Student ID:</label>
-          <input
-            type="number"
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-6">
+          <label className="block text-sm font-medium text-gray-700 mb-2">Select Student:</label>
+          <select
             value={studentId}
-            onChange={(e) => setStudentId(e.target.value)}
-            className="border border-gray-300 rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-24"
-          />
-          <button
-            onClick={fetchGrades}
-            className="bg-gray-800 text-white px-4 py-1.5 rounded text-sm hover:bg-gray-900 transition"
+            onChange={(e) => {
+              setStudentId(e.target.value);
+              const student = students.find((s) => s.id === parseInt(e.target.value));
+              setSelectedStudent(student);
+              setAnalytics(null);
+              setGrades([]);
+            }}
+            className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            Load Grades
-          </button>
+            <option value="">-- Select a student --</option>
+            {students.map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.name} ({s.email})
+              </option>
+            ))}
+          </select>
+          {selectedStudent && (
+            <p className="text-sm text-gray-500 mt-2">
+              Viewing grades for: <span className="font-medium text-gray-800">{selectedStudent.name}</span>
+            </p>
+          )}
         </div>
+
+        {!studentId && (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
+            <Users size={48} className="text-gray-300 mx-auto mb-4" />
+            <p className="text-gray-500 text-lg">Select a student to view their grades</p>
+          </div>
+        )}
 
         {analytics && (
           <>
@@ -161,10 +195,10 @@ const TeacherDashboard = () => {
           </>
         )}
 
-        {showForm && (
+        {showForm && studentId && (
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
             <h3 className="text-lg font-semibold text-gray-800 mb-4">
-              {editingGrade ? 'Edit Grade' : 'Add New Grade'}
+              {editingGrade ? 'Edit Grade' : `Add New Grade for ${selectedStudent?.name}`}
             </h3>
             <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               <div>
@@ -258,62 +292,64 @@ const TeacherDashboard = () => {
           </div>
         )}
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">
-            Grades for Student ID: {studentId}
-          </h3>
-          {loading ? (
-            <div className="flex justify-center py-8">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-            </div>
-          ) : grades.length === 0 ? (
-            <p className="text-center text-gray-400 py-8">No grades found for this student.</p>
-          ) : (
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="text-left text-gray-500 border-b">
-                  <th className="pb-3">Subject</th>
-                  <th className="pb-3">Score</th>
-                  <th className="pb-3">Term</th>
-                  <th className="pb-3">Date</th>
-                  <th className="pb-3">Remarks</th>
-                  <th className="pb-3">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {grades.map((grade) => (
-                  <tr key={grade.id} className="border-b last:border-0 hover:bg-gray-50">
-                    <td className="py-3 font-medium text-gray-800">{grade.subject}</td>
-                    <td className="py-3">
-                      <span className={`font-semibold ${(grade.score / grade.maxScore) * 100 >= 80 ? 'text-green-600' : (grade.score / grade.maxScore) * 100 >= 60 ? 'text-yellow-600' : 'text-red-600'}`}>
-                        {grade.score}/{grade.maxScore}
-                      </span>
-                    </td>
-                    <td className="py-3 text-gray-500">{grade.term}</td>
-                    <td className="py-3 text-gray-500">{grade.examDate}</td>
-                    <td className="py-3 text-gray-400 italic">{grade.remarks || '-'}</td>
-                    <td className="py-3">
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => handleEdit(grade)}
-                          className="p-1.5 text-blue-600 hover:bg-blue-50 rounded transition"
-                        >
-                          <Pencil size={15} />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(grade.id)}
-                          className="p-1.5 text-red-500 hover:bg-red-50 rounded transition"
-                        >
-                          <Trash2 size={15} />
-                        </button>
-                      </div>
-                    </td>
+        {studentId && (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">
+              Grades for {selectedStudent?.name}
+            </h3>
+            {loading ? (
+              <div className="flex justify-center py-8">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+              </div>
+            ) : grades.length === 0 ? (
+              <p className="text-center text-gray-400 py-8">No grades found for this student.</p>
+            ) : (
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="text-left text-gray-500 border-b">
+                    <th className="pb-3">Subject</th>
+                    <th className="pb-3">Score</th>
+                    <th className="pb-3">Term</th>
+                    <th className="pb-3">Date</th>
+                    <th className="pb-3">Remarks</th>
+                    <th className="pb-3">Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </div>
+                </thead>
+                <tbody>
+                  {grades.map((grade) => (
+                    <tr key={grade.id} className="border-b last:border-0 hover:bg-gray-50">
+                      <td className="py-3 font-medium text-gray-800">{grade.subject}</td>
+                      <td className="py-3">
+                        <span className={`font-semibold ${(grade.score / grade.maxScore) * 100 >= 80 ? 'text-green-600' : (grade.score / grade.maxScore) * 100 >= 60 ? 'text-yellow-600' : 'text-red-600'}`}>
+                          {grade.score}/{grade.maxScore}
+                        </span>
+                      </td>
+                      <td className="py-3 text-gray-500">{grade.term}</td>
+                      <td className="py-3 text-gray-500">{grade.examDate}</td>
+                      <td className="py-3 text-gray-400 italic">{grade.remarks || '-'}</td>
+                      <td className="py-3">
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => handleEdit(grade)}
+                            className="p-1.5 text-blue-600 hover:bg-blue-50 rounded transition"
+                          >
+                            <Pencil size={15} />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(grade.id)}
+                            className="p-1.5 text-red-500 hover:bg-red-50 rounded transition"
+                          >
+                            <Trash2 size={15} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

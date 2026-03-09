@@ -69,4 +69,21 @@ const getAllUsers = async (req, res) => {
   }
 };
 
-module.exports = { getPendingTeachers, approveTeacher, rejectTeacher, getAllUsers };
+
+// @route   GET /api/admin/all-students
+// @access  Private - Teacher, Admin
+const getAllStudents = async (req, res) => {
+  try {
+    const students = await User.findAll({
+      where: { role: 'student', status: 'active' },
+      attributes: ['id', 'name', 'email'],
+      order: [['name', 'ASC']],
+    });
+
+    res.status(200).json({ students });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+module.exports = { getPendingTeachers, approveTeacher, rejectTeacher, getAllUsers, getAllStudents };
