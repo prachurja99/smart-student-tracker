@@ -20,5 +20,11 @@ export const getGradeAnalytics = (studentId) => API.get(`/grades/analytics/${stu
 export const createGrade = (data) => API.post('/grades', data);
 export const updateGrade = (id, data) => API.put(`/grades/${id}`, data);
 export const deleteGrade = (id) => API.delete(`/grades/${id}`);
+export const getStudentAnalytics = (studentId) => API.get(`/grades/analytics/${studentId}`);
+export const getPendingTeachers = () => API.get('/admin/pending-teachers');
+export const approveTeacher = (id) => API.put(`/admin/approve-teacher/${id}`);
+export const rejectTeacher = (id) => API.put(`/admin/reject-teacher/${id}`);
+export const getAllUsers = () => API.get('/admin/all-users');
+
 
 export default API;

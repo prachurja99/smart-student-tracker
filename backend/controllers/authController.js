@@ -27,12 +27,22 @@ const register = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
+    const isTeacher = role === 'teacher';
+
     const user = await User.create({
       name,
       email,
       password: hashedPassword,
-      role: role || 'student',
+      role: isTeacher ? 'teacher' : 'student',
+      status: isTeacher ? 'pending' : 'active',
     });
+
+    if (isTeacher) {
+      return res.status(201).json({
+        message: 'Teacher registration request submitted. Please wait for admin approval.',
+        pending: true,
+      });
+    }
 
     const token = generateToken(user.id, user.role);
 
@@ -44,6 +54,7 @@ const register = async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        status: user.status,
       },
     });
   } catch (error) {
@@ -69,6 +80,14 @@ const login = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+    if (user.status === 'pending') {
+      return res.status(403).json({ message: 'Your account is pending admin approval.' });
+    }
+
+    if (user.status === 'rejected') {
+      return res.status(403).json({ message: 'Your account has been rejected by admin.' });
     }
 
     const token = generateToken(user.id, user.role);
