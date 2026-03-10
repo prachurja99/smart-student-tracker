@@ -4,6 +4,7 @@ import { createGrade, updateGrade, deleteGrade, getGradesByStudent, getStudentAn
 import Navbar from '../../components/layout/Navbar';
 import { SubjectBarChart, GradeTrendChart } from '../../components/dashboard/GradeChart';
 import RiskCard from '../../components/dashboard/RiskCard';
+import ChatBot from '../../components/dashboard/ChatBot';
 import { Plus, Pencil, Trash2, X, Check, Users, BookOpen, TrendingUp, Award } from 'lucide-react';
 
 const StatCard = ({ title, value, icon: Icon, color }) => (
@@ -337,6 +338,15 @@ const TeacherDashboard = () => {
           </>
         )}
       </div>
+      <ChatBot context={analytics ? {
+        selectedStudent: selectedStudent?.name,
+        overallAverage: analytics?.overallAverage,
+        totalGrades: analytics?.totalGrades,
+        subjectAverages: analytics?.subjectAverages,
+        riskLevel: mlAnalysis?.riskLevel,
+        failingSubjects: mlAnalysis?.failingSubjects,
+        suggestions: mlAnalysis?.suggestions,
+      } : null} />
     </div>
   );
 };

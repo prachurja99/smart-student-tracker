@@ -36,5 +36,6 @@ export const promoteToAdmin = (id) => API.put(`/admin/promote/${id}`);
 export const getMySection = () => API.get('/sections/my-section');
 export const getMLAnalysis = (studentId) => API.get(`/grades/ml-analysis/${studentId}`);
 export const getMyMLAnalysis = () => API.get(`/grades/ml-analysis/me`);
+export const sendChatMessage = (message, context) => API.post('/chat', { message, context });
 
 export default API;
