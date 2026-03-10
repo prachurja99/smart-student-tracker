@@ -1,3 +1,4 @@
+const axios = require('axios');
 const Grade = require('../models/Grade');
 const User = require('../models/User');
 
@@ -142,4 +143,74 @@ const getGradeAnalytics = async (req, res) => {
   }
 };
 
-module.exports = { createGrade, getGradesByStudent, updateGrade, deleteGrade, getGradeAnalytics };
+// @route   GET /api/grades/ml-analysis/:studentId
+// @access  Private - Teacher/Admin
+const getMLAnalysis = async (req, res) => {
+  try {
+    const { studentId } = req.params;
+
+    const grades = await Grade.findAll({
+      where: { studentId },
+      order: [['examDate', 'ASC']],
+    });
+
+    if (grades.length === 0) {
+      return res.status(200).json({
+        riskLevel: 'unknown',
+        message: 'No grades available to analyze',
+        suggestions: ['Add grades for this student to get ML analysis.'],
+      });
+    }
+
+    const gradeData = grades.map((g) => ({
+      subject: g.subject,
+      score: parseFloat(g.score),
+      maxScore: parseFloat(g.maxScore),
+      examDate: g.examDate,
+    }));
+
+    const mlResponse = await axios.post('http://127.0.0.1:5001/analyze', {
+      grades: gradeData,
+    });
+
+    res.status(200).json(mlResponse.data);
+  } catch (error) {
+    res.status(500).json({ message: 'ML service error', error: error.message });
+  }
+};
+
+// @route   GET /api/grades/ml-analysis/me
+// @access  Private - Student only
+const getMyMLAnalysis = async (req, res) => {
+  try {
+    const grades = await Grade.findAll({
+      where: { studentId: req.user.id },
+      order: [['examDate', 'ASC']],
+    });
+
+    if (grades.length === 0) {
+      return res.status(200).json({
+        riskLevel: 'unknown',
+        message: 'No grades available to analyze',
+        suggestions: ['Your teacher has not added any grades yet.'],
+      });
+    }
+
+    const gradeData = grades.map((g) => ({
+      subject: g.subject,
+      score: parseFloat(g.score),
+      maxScore: parseFloat(g.maxScore),
+      examDate: g.examDate,
+    }));
+
+    const mlResponse = await axios.post('http://127.0.0.1:5001/analyze', {
+      grades: gradeData,
+    });
+
+    res.status(200).json(mlResponse.data);
+  } catch (error) {
+    res.status(500).json({ message: 'ML service error', error: error.message });
+  }
+};
+
+module.exports = { createGrade, getGradesByStudent, updateGrade, deleteGrade, getGradeAnalytics, getMLAnalysis, getMyMLAnalysis };

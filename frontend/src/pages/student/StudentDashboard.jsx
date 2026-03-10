@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { getGradeAnalytics, getMySection } from '../../services/api';
+import { getGradeAnalytics, getMySection, getMyMLAnalysis } from '../../services/api';
 import Navbar from '../../components/layout/Navbar';
 import { SubjectBarChart, GradeTrendChart, SubjectPieChart } from '../../components/dashboard/GradeChart';
+import RiskCard from '../../components/dashboard/RiskCard';
 import { TrendingUp, BookOpen, Award, BarChart2 } from 'lucide-react';
 
 const StatCard = ({ title, value, icon: Icon, color }) => (
@@ -21,6 +22,8 @@ const StudentDashboard = () => {
   const { user } = useAuth();
   const [analytics, setAnalytics] = useState(null);
   const [section, setSection] = useState(null);
+  const [mlAnalysis, setMlAnalysis] = useState(null);
+  const [mlLoading, setMlLoading] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -32,6 +35,14 @@ const StudentDashboard = () => {
       .then(([analyticsRes, sectionRes]) => {
         setAnalytics(analyticsRes.data.analytics);
         setSection(sectionRes.data.section);
+
+        if (analyticsRes.data.analytics) {
+          setMlLoading(true);
+          getMyMLAnalysis()
+            .then((mlRes) => setMlAnalysis(mlRes.data))
+            .catch(() => setMlAnalysis(null))
+            .finally(() => setMlLoading(false));
+        }
       })
       .catch(() => setError('Failed to load your data'))
       .finally(() => setLoading(false));
@@ -95,6 +106,10 @@ const StudentDashboard = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
               <SubjectBarChart data={analytics.subjectAverages} />
               <GradeTrendChart data={analytics.grades} />
+            </div>
+
+            <div className="mb-6">
+              <RiskCard analysis={mlAnalysis} loading={mlLoading} />
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

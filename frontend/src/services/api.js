@@ -34,5 +34,7 @@ export const removeStudentFromSection = (sectionId, studentId) => API.delete(`/s
 export const getMyStudents = () => API.get('/sections/my-students');
 export const promoteToAdmin = (id) => API.put(`/admin/promote/${id}`);
 export const getMySection = () => API.get('/sections/my-section');
+export const getMLAnalysis = (studentId) => API.get(`/grades/ml-analysis/${studentId}`);
+export const getMyMLAnalysis = () => API.get(`/grades/ml-analysis/me`);
 
 export default API;

@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { createGrade, updateGrade, deleteGrade, getGradesByStudent, getStudentAnalytics, getMyStudents } from '../../services/api';
+import { createGrade, updateGrade, deleteGrade, getGradesByStudent, getStudentAnalytics, getMyStudents, getMLAnalysis } from '../../services/api';
 import Navbar from '../../components/layout/Navbar';
 import { SubjectBarChart, GradeTrendChart } from '../../components/dashboard/GradeChart';
+import RiskCard from '../../components/dashboard/RiskCard';
 import { Plus, Pencil, Trash2, X, Check, Users, BookOpen, TrendingUp, Award } from 'lucide-react';
 
 const StatCard = ({ title, value, icon: Icon, color }) => (
@@ -30,6 +31,8 @@ const TeacherDashboard = () => {
   const [students, setStudents] = useState([]);
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [sectionName, setSectionName] = useState('');
+  const [mlAnalysis, setMlAnalysis] = useState(null);
+  const [mlLoading, setMlLoading] = useState(false);
   const [form, setForm] = useState({
     subject: '',
     score: '',
@@ -54,6 +57,7 @@ const TeacherDashboard = () => {
   const fetchGrades = async () => {
     if (!studentId) return;
     setLoading(true);
+    setMlLoading(true);
     setError('');
     try {
       const [gradesRes, analyticsRes] = await Promise.all([
@@ -62,10 +66,14 @@ const TeacherDashboard = () => {
       ]);
       setGrades(gradesRes.data.grades);
       setAnalytics(analyticsRes.data.analytics);
+
+      const mlRes = await getMLAnalysis(studentId);
+      setMlAnalysis(mlRes.data);
     } catch {
       setError('Failed to load grades');
     } finally {
       setLoading(false);
+      setMlLoading(false);
     }
   };
 
@@ -169,6 +177,7 @@ const TeacherDashboard = () => {
                   setSelectedStudent(student);
                   setAnalytics(null);
                   setGrades([]);
+                  setMlAnalysis(null);
                 }}
                 className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
@@ -201,9 +210,14 @@ const TeacherDashboard = () => {
                   <StatCard title="Best Subject" value={analytics.subjectAverages.reduce((a, b) => a.average > b.average ? a : b).subject} icon={Award} color="bg-yellow-500" />
                   <StatCard title="Subjects Tracked" value={analytics.subjectAverages.length} icon={Users} color="bg-purple-500" />
                 </div>
+
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                   <SubjectBarChart data={analytics.subjectAverages} />
                   <GradeTrendChart data={analytics.grades} />
+                </div>
+
+                <div className="mb-6">
+                  <RiskCard analysis={mlAnalysis} loading={mlLoading} />
                 </div>
               </>
             )}
