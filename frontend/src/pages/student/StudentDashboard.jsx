@@ -5,7 +5,8 @@ import Navbar from '../../components/layout/Navbar';
 import { SubjectBarChart, GradeTrendChart, SubjectPieChart } from '../../components/dashboard/GradeChart';
 import RiskCard from '../../components/dashboard/RiskCard';
 import ChatBot from '../../components/dashboard/ChatBot';
-import { TrendingUp, BookOpen, Award, BarChart2 } from 'lucide-react';
+import { TrendingUp, BookOpen, Award, BarChart2, Download } from 'lucide-react';
+import { generateStudentReport } from '../../utils/generateReport';
 
 const StatCard = ({ title, value, icon: Icon, color }) => (
   <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-center gap-4">
@@ -49,6 +50,16 @@ const StudentDashboard = () => {
       .finally(() => setLoading(false));
   }, [user]);
 
+  const handleDownloadReport = () => {
+    generateStudentReport(
+      user.name,
+      analytics,
+      mlAnalysis,
+      section?.name,
+      section?.teacher?.name
+    );
+  };
+
   if (loading) return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
@@ -72,20 +83,31 @@ const StudentDashboard = () => {
       <Navbar />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Welcome back, {user?.name}</h1>
-          <p className="text-gray-500 mt-1">Here is your academic performance overview</p>
-          {section ? (
-            <div className="mt-3 inline-flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-lg px-4 py-2">
-              <span className="text-sm text-blue-700 font-medium">Section: {section.name}</span>
-              {section.teacher && (
-                <span className="text-sm text-blue-500">| Teacher: {section.teacher.name}</span>
-              )}
-            </div>
-          ) : (
-            <div className="mt-3 inline-flex items-center gap-2 bg-yellow-50 border border-yellow-200 rounded-lg px-4 py-2">
-              <span className="text-sm text-yellow-700">Not assigned to any section yet</span>
-            </div>
+        <div className="mb-8 flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Welcome back, {user?.name}</h1>
+            <p className="text-gray-500 mt-1">Here is your academic performance overview</p>
+            {section ? (
+              <div className="mt-3 inline-flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-lg px-4 py-2">
+                <span className="text-sm text-blue-700 font-medium">Section: {section.name}</span>
+                {section.teacher && (
+                  <span className="text-sm text-blue-500">| Teacher: {section.teacher.name}</span>
+                )}
+              </div>
+            ) : (
+              <div className="mt-3 inline-flex items-center gap-2 bg-yellow-50 border border-yellow-200 rounded-lg px-4 py-2">
+                <span className="text-sm text-yellow-700">Not assigned to any section yet</span>
+              </div>
+            )}
+          </div>
+          {analytics && (
+            <button
+              onClick={handleDownloadReport}
+              className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
+            >
+              <Download size={18} />
+              Download Report
+            </button>
           )}
         </div>
 

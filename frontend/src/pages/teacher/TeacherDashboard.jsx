@@ -5,7 +5,8 @@ import Navbar from '../../components/layout/Navbar';
 import { SubjectBarChart, GradeTrendChart } from '../../components/dashboard/GradeChart';
 import RiskCard from '../../components/dashboard/RiskCard';
 import ChatBot from '../../components/dashboard/ChatBot';
-import { Plus, Pencil, Trash2, X, Check, Users, BookOpen, TrendingUp, Award } from 'lucide-react';
+import { Plus, Pencil, Trash2, X, Check, Users, BookOpen, TrendingUp, Award, Download } from 'lucide-react';
+import { generateStudentReport } from '../../utils/generateReport';
 
 const StatCard = ({ title, value, icon: Icon, color }) => (
   <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-center gap-4">
@@ -135,6 +136,16 @@ const TeacherDashboard = () => {
     }
   };
 
+  const handleDownloadReport = () => {
+    generateStudentReport(
+      selectedStudent?.name,
+      analytics,
+      mlAnalysis,
+      sectionName,
+      user.name
+    );
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
@@ -147,14 +158,25 @@ const TeacherDashboard = () => {
               {sectionName ? `Section: ${sectionName}` : 'No section assigned yet'}
             </p>
           </div>
-          <button
-            onClick={() => { setShowForm(!showForm); setEditingGrade(null); }}
-            disabled={!studentId}
-            className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <Plus size={18} />
-            Add Grade
-          </button>
+          <div className="flex gap-3">
+            {analytics && (
+              <button
+                onClick={handleDownloadReport}
+                className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
+              >
+                <Download size={18} />
+                Download Report
+              </button>
+            )}
+            <button
+              onClick={() => { setShowForm(!showForm); setEditingGrade(null); }}
+              disabled={!studentId}
+              className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <Plus size={18} />
+              Add Grade
+            </button>
+          </div>
         </div>
 
         {error && <div className="bg-red-100 text-red-700 p-3 rounded-lg mb-4">{error}</div>}
