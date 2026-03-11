@@ -9,22 +9,22 @@ An AI-powered student performance analytics platform built as a full-stack portf
 ## Screenshots
 
 ### Admin Dashboard
-![Admin Dashboard](./docs/screenshots/admin-dashboard.png)
+![Admin Dashboard](https://raw.githubusercontent.com/prachurja99/smart-student-tracker/main/docs/screenshots/admin-dashboard.png)
 
 ### Teacher Dashboard
-![Teacher Dashboard](./docs/screenshots/teacher-dashboard.png)
+![Teacher Dashboard](https://raw.githubusercontent.com/prachurja99/smart-student-tracker/main/docs/screenshots/teacher-dashboard.png)
 
 ### Student Dashboard
-![Student Dashboard](./docs/screenshots/student-dashboard.png)
+![Student Dashboard](https://raw.githubusercontent.com/prachurja99/smart-student-tracker/main/docs/screenshots/student-dashboard.png)
 
 ### ML Risk Analysis
-![ML Risk Analysis](./docs/screenshots/ml-risk-analysis.png)
+![ML Risk Analysis](https://raw.githubusercontent.com/prachurja99/smart-student-tracker/main/docs/screenshots/ml-risk-analysis.png)
 
 ### AI Chatbot
-![AI Chatbot](./docs/screenshots/ai-chatbot.png)
+![AI Chatbot](https://raw.githubusercontent.com/prachurja99/smart-student-tracker/main/docs/screenshots/ai-chatbot.png)
 
 ### Dark Mode
-![Dark Mode](./docs/screenshots/dark-mode.png)
+![Dark Mode](https://raw.githubusercontent.com/prachurja99/smart-student-tracker/main/docs/screenshots/dark-mode.png)
 
 ---
 
@@ -284,6 +284,7 @@ Full dark mode support across all pages and components. Theme preference is save
 ## 📄 License
 
 This project is open source and available under the [MIT License](LICENSE).
+
 
 
 
