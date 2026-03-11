@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: smart-student-tracker-backend
+    env: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+
+  - type: web
+    name: smart-student-tracker-ml
+    env: python
+    rootDir: ml-service
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: PORT
+        value: 5001
