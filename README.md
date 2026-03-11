@@ -6,30 +6,25 @@ An AI-powered student performance analytics platform built as a full-stack portf
 
 ---
 
-## 📸 Screenshots
+## Screenshots
 
-### 🛡️ Admin Dashboard
-![Admin Dashboard](https://via.placeholder.com/1280x720/1e293b/6366f1?text=Admin+Dashboard)
-> Manage users, approve teachers, create sections, and get a full system overview.
+### Admin Dashboard
+![Admin Dashboard](./docs/screenshots/admin-dashboard.png)
 
-### 👨‍🏫 Teacher Dashboard
-![Teacher Dashboard](https://via.placeholder.com/1280x720/1e293b/22c55e?text=Teacher+Dashboard)
-> View assigned students, manage grades, and access ML risk analysis.
+### Teacher Dashboard
+![Teacher Dashboard](./docs/screenshots/teacher-dashboard.png)
 
-### 👨‍🎓 Student Dashboard
-![Student Dashboard](https://via.placeholder.com/1280x720/1e293b/3b82f6?text=Student+Dashboard)
-> Personal grade analytics, AI chatbot, risk level indicator, and PDF download.
+### Student Dashboard
+![Student Dashboard](./docs/screenshots/student-dashboard.png)
 
-### 🤖 ML Risk Analysis
-![ML Risk Analysis](https://via.placeholder.com/1280x720/1e293b/f59e0b?text=ML+Risk+Analysis)
-> Color-coded academic risk levels powered by the Python Flask microservice.
+### ML Risk Analysis
+![ML Risk Analysis](./docs/screenshots/ml-risk-analysis.png)
 
-### 💬 AI Chatbot
-![AI Chatbot](https://via.placeholder.com/1280x720/1e293b/a855f7?text=AI+Chatbot)
-> Context-aware academic guidance powered by Groq's llama-3.3-70b-versatile model.
+### AI Chatbot
+![AI Chatbot](./docs/screenshots/ai-chatbot.png)
 
-### 🌙 Dark Mode
-![Dark Mode](https://via.placeholder.com/1280x720/0f172a/e2e8f0?text=Dark+Mode)
+### Dark Mode
+![Dark Mode](./docs/screenshots/dark-mode.png)
 
 ---
 
@@ -289,6 +284,7 @@ Full dark mode support across all pages and components. Theme preference is save
 ## 📄 License
 
 This project is open source and available under the [MIT License](LICENSE).
+
 
 
 
