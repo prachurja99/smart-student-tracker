@@ -12,30 +12,49 @@ require('./models/StudentSection');
 const app = express();
 const server = http.createServer(app);
 
-// CORS origins
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:4173',
   process.env.FRONTEND_URL,
+  /\.vercel\.app$/,
 ].filter(Boolean);
 
-// Middleware
-app.use(cors({
-  origin: allowedOrigins,
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    if (
+      allowedOrigins.some((o) =>
+        typeof o === 'string' ? o === origin : o.test(origin)
+      )
+    ) {
+      return callback(null, true);
+    }
+    return callback(new Error('Not allowed by CORS'));
+  },
   credentials: true,
-}));
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
-// Socket.IO
 const io = new Server(server, {
   cors: {
-    origin: allowedOrigins,
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+      if (
+        allowedOrigins.some((o) =>
+          typeof o === 'string' ? o === origin : o.test(origin)
+        )
+      ) {
+        return callback(null, true);
+      }
+      return callback(new Error('Not allowed by CORS'));
+    },
     methods: ['GET', 'POST'],
     credentials: true,
   },
 });
 
-// Store io instance for use in controllers
 app.set('io', io);
 
 io.on('connection', (socket) => {
@@ -51,7 +70,6 @@ io.on('connection', (socket) => {
   });
 });
 
-// Routes
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/grades', require('./routes/gradeRoutes'));
 app.use('/api/admin', require('./routes/adminRoutes'));
@@ -59,12 +77,10 @@ app.use('/api/sections', require('./routes/sectionRoutes'));
 app.use('/api/chat', require('./routes/chatRoutes'));
 app.use('/api/notifications', require('./routes/notificationRoutes'));
 
-// Health check
 app.get('/', (req, res) => {
   res.json({ message: 'Smart Student Tracker API is running!' });
 });
 
-// Start server
 const PORT = process.env.PORT || 5000;
 
 const startServer = async () => {
