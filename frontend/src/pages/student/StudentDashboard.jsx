@@ -9,13 +9,13 @@ import { TrendingUp, BookOpen, Award, BarChart2, Download } from 'lucide-react';
 import { generateStudentReport } from '../../utils/generateReport';
 
 const StatCard = ({ title, value, icon: Icon, color }) => (
-  <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-center gap-4">
+  <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 flex items-center gap-4">
     <div className={`p-3 rounded-full ${color}`}>
       <Icon size={24} className="text-white" />
     </div>
     <div>
-      <p className="text-sm text-gray-500">{title}</p>
-      <p className="text-2xl font-bold text-gray-800">{value}</p>
+      <p className="text-sm text-gray-500 dark:text-gray-400">{title}</p>
+      <p className="text-2xl font-bold text-gray-800 dark:text-white">{value}</p>
     </div>
   </div>
 );
@@ -29,26 +29,42 @@ const StudentDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    Promise.all([
-      getGradeAnalytics(user.id),
-      getMySection(),
-    ])
-      .then(([analyticsRes, sectionRes]) => {
-        setAnalytics(analyticsRes.data.analytics);
-        setSection(sectionRes.data.section);
+  const fetchAllData = async () => {
+    try {
+      const [analyticsRes, sectionRes] = await Promise.all([
+        getGradeAnalytics(user.id),
+        getMySection(),
+      ]);
+      setAnalytics(analyticsRes.data.analytics);
+      setSection(sectionRes.data.section);
 
-        if (analyticsRes.data.analytics) {
-          setMlLoading(true);
-          getMyMLAnalysis()
-            .then((mlRes) => setMlAnalysis(mlRes.data))
-            .catch(() => setMlAnalysis(null))
-            .finally(() => setMlLoading(false));
-        }
-      })
-      .catch(() => setError('Failed to load your data'))
-      .finally(() => setLoading(false));
+      if (analyticsRes.data.analytics) {
+        setMlLoading(true);
+        getMyMLAnalysis()
+          .then((mlRes) => setMlAnalysis(mlRes.data))
+          .catch(() => setMlAnalysis(null))
+          .finally(() => setMlLoading(false));
+      }
+    } catch {
+      setError('Failed to load your data');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllData();
   }, [user]);
+
+  useEffect(() => {
+    const handleGradeUpdated = () => fetchAllData();
+    window.addEventListener('gradeUpdated', handleGradeUpdated);
+    const interval = setInterval(() => fetchAllData(), 30000);
+    return () => {
+      window.removeEventListener('gradeUpdated', handleGradeUpdated);
+      clearInterval(interval);
+    };
+  }, []);
 
   const handleDownloadReport = () => {
     generateStudentReport(
@@ -61,7 +77,7 @@ const StudentDashboard = () => {
   };
 
   if (loading) return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       <Navbar />
       <div className="flex items-center justify-center h-96">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
@@ -70,7 +86,7 @@ const StudentDashboard = () => {
   );
 
   if (error) return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       <Navbar />
       <div className="flex items-center justify-center h-96">
         <p className="text-red-500">{error}</p>
@@ -79,24 +95,24 @@ const StudentDashboard = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       <Navbar />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Welcome back, {user?.name}</h1>
-            <p className="text-gray-500 mt-1">Here is your academic performance overview</p>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Welcome back, {user?.name}</h1>
+            <p className="text-gray-500 dark:text-gray-400 mt-1">Here is your academic performance overview</p>
             {section ? (
-              <div className="mt-3 inline-flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-lg px-4 py-2">
-                <span className="text-sm text-blue-700 font-medium">Section: {section.name}</span>
+              <div className="mt-3 inline-flex items-center gap-2 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-lg px-4 py-2">
+                <span className="text-sm text-blue-700 dark:text-blue-300 font-medium">Section: {section.name}</span>
                 {section.teacher && (
-                  <span className="text-sm text-blue-500">| Teacher: {section.teacher.name}</span>
+                  <span className="text-sm text-blue-500 dark:text-blue-400">| Teacher: {section.teacher.name}</span>
                 )}
               </div>
             ) : (
-              <div className="mt-3 inline-flex items-center gap-2 bg-yellow-50 border border-yellow-200 rounded-lg px-4 py-2">
-                <span className="text-sm text-yellow-700">Not assigned to any section yet</span>
+              <div className="mt-3 inline-flex items-center gap-2 bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-700 rounded-lg px-4 py-2">
+                <span className="text-sm text-yellow-700 dark:text-yellow-300">Not assigned to any section yet</span>
               </div>
             )}
           </div>
@@ -112,10 +128,10 @@ const StudentDashboard = () => {
         </div>
 
         {!analytics ? (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
-            <BookOpen size={48} className="text-gray-300 mx-auto mb-4" />
-            <p className="text-gray-500 text-lg">No grades recorded yet.</p>
-            <p className="text-gray-400 text-sm mt-1">Your teacher will add your grades soon.</p>
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-12 text-center">
+            <BookOpen size={48} className="text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+            <p className="text-gray-500 dark:text-gray-400 text-lg">No grades recorded yet.</p>
+            <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">Your teacher will add your grades soon.</p>
           </div>
         ) : (
           <>
@@ -137,11 +153,11 @@ const StudentDashboard = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <SubjectPieChart data={analytics.subjectAverages} />
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h3 className="text-lg font-semibold text-gray-800 mb-4">Recent Grades</h3>
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+                <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Recent Grades</h3>
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="text-left text-gray-500 border-b">
+                    <tr className="text-left text-gray-500 dark:text-gray-400 border-b dark:border-gray-700">
                       <th className="pb-3">Subject</th>
                       <th className="pb-3">Score</th>
                       <th className="pb-3">Term</th>
@@ -150,15 +166,15 @@ const StudentDashboard = () => {
                   </thead>
                   <tbody>
                     {analytics.grades.map((grade) => (
-                      <tr key={grade.id} className="border-b last:border-0 hover:bg-gray-50">
-                        <td className="py-3 font-medium text-gray-800">{grade.subject}</td>
+                      <tr key={grade.id} className="border-b dark:border-gray-700 last:border-0 hover:bg-gray-50 dark:hover:bg-gray-700">
+                        <td className="py-3 font-medium text-gray-800 dark:text-white">{grade.subject}</td>
                         <td className="py-3">
                           <span className={`font-semibold ${(grade.score / grade.maxScore) * 100 >= 80 ? 'text-green-600' : (grade.score / grade.maxScore) * 100 >= 60 ? 'text-yellow-600' : 'text-red-600'}`}>
                             {grade.score}/{grade.maxScore}
                           </span>
                         </td>
-                        <td className="py-3 text-gray-500">{grade.term}</td>
-                        <td className="py-3 text-gray-500">{grade.examDate}</td>
+                        <td className="py-3 text-gray-500 dark:text-gray-400">{grade.term}</td>
+                        <td className="py-3 text-gray-500 dark:text-gray-400">{grade.examDate}</td>
                       </tr>
                     ))}
                   </tbody>

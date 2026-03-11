@@ -9,13 +9,13 @@ import { Plus, Pencil, Trash2, X, Check, Users, BookOpen, TrendingUp, Award, Dow
 import { generateStudentReport } from '../../utils/generateReport';
 
 const StatCard = ({ title, value, icon: Icon, color }) => (
-  <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-center gap-4">
+  <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 flex items-center gap-4">
     <div className={`p-3 rounded-full ${color}`}>
       <Icon size={24} className="text-white" />
     </div>
     <div>
-      <p className="text-sm text-gray-500">{title}</p>
-      <p className="text-2xl font-bold text-gray-800">{value}</p>
+      <p className="text-sm text-gray-500 dark:text-gray-400">{title}</p>
+      <p className="text-2xl font-bold text-gray-800 dark:text-white">{value}</p>
     </div>
   </div>
 );
@@ -48,9 +48,7 @@ const TeacherDashboard = () => {
     try {
       const res = await getMyStudents();
       setStudents(res.data.students);
-      if (res.data.section) {
-        setSectionName(res.data.section.name);
-      }
+      if (res.data.section) setSectionName(res.data.section.name);
     } catch {
       setError('Failed to load students');
     }
@@ -68,7 +66,6 @@ const TeacherDashboard = () => {
       ]);
       setGrades(gradesRes.data.grades);
       setAnalytics(analyticsRes.data.analytics);
-
       const mlRes = await getMLAnalysis(studentId);
       setMlAnalysis(mlRes.data);
     } catch {
@@ -79,17 +76,10 @@ const TeacherDashboard = () => {
     }
   };
 
-  useEffect(() => {
-    fetchStudents();
-  }, []);
+  useEffect(() => { fetchStudents(); }, []);
+  useEffect(() => { if (studentId) fetchGrades(); }, [studentId]);
 
-  useEffect(() => {
-    if (studentId) fetchGrades();
-  }, [studentId]);
-
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -147,14 +137,14 @@ const TeacherDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       <Navbar />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Teacher Dashboard</h1>
-            <p className="text-gray-500 mt-1">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Teacher Dashboard</h1>
+            <p className="text-gray-500 dark:text-gray-400 mt-1">
               {sectionName ? `Section: ${sectionName}` : 'No section assigned yet'}
             </p>
           </div>
@@ -179,19 +169,19 @@ const TeacherDashboard = () => {
           </div>
         </div>
 
-        {error && <div className="bg-red-100 text-red-700 p-3 rounded-lg mb-4">{error}</div>}
-        {success && <div className="bg-green-100 text-green-700 p-3 rounded-lg mb-4">{success}</div>}
+        {error && <div className="bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 p-3 rounded-lg mb-4">{error}</div>}
+        {success && <div className="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 p-3 rounded-lg mb-4">{success}</div>}
 
         {students.length === 0 ? (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
-            <Users size={48} className="text-gray-300 mx-auto mb-4" />
-            <p className="text-gray-500 text-lg">No students assigned to your section yet.</p>
-            <p className="text-gray-400 text-sm mt-1">Please contact the admin to assign students to your section.</p>
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-12 text-center">
+            <Users size={48} className="text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+            <p className="text-gray-500 dark:text-gray-400 text-lg">No students assigned to your section yet.</p>
+            <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">Please contact the admin to assign students.</p>
           </div>
         ) : (
           <>
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Select Student:</label>
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 mb-6">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Select Student:</label>
               <select
                 value={studentId}
                 onChange={(e) => {
@@ -202,26 +192,24 @@ const TeacherDashboard = () => {
                   setGrades([]);
                   setMlAnalysis(null);
                 }}
-                className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">-- Select a student --</option>
                 {students.map((s) => (
-                  <option key={s.id} value={s.id}>
-                    {s.name} ({s.email})
-                  </option>
+                  <option key={s.id} value={s.id}>{s.name} ({s.email})</option>
                 ))}
               </select>
               {selectedStudent && (
-                <p className="text-sm text-gray-500 mt-2">
-                  Viewing grades for: <span className="font-medium text-gray-800">{selectedStudent.name}</span>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+                  Viewing grades for: <span className="font-medium text-gray-800 dark:text-white">{selectedStudent.name}</span>
                 </p>
               )}
             </div>
 
             {!studentId && (
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
-                <Users size={48} className="text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-500 text-lg">Select a student to view their grades</p>
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-12 text-center">
+                <Users size={48} className="text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+                <p className="text-gray-500 dark:text-gray-400 text-lg">Select a student to view their grades</p>
               </div>
             )}
 
@@ -246,45 +234,45 @@ const TeacherDashboard = () => {
             )}
 
             {showForm && studentId && (
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
-                <h3 className="text-lg font-semibold text-gray-800 mb-4">
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 mb-6">
+                <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
                   {editingGrade ? 'Edit Grade' : `Add New Grade for ${selectedStudent?.name}`}
                 </h3>
                 <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Subject</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Subject</label>
                     <input type="text" name="subject" value={form.subject} onChange={handleChange}
-                      className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                       placeholder="e.g. Mathematics" required />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Score</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Score</label>
                     <input type="number" name="score" value={form.score} onChange={handleChange}
-                      className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                       placeholder="e.g. 85" required />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Max Score</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Max Score</label>
                     <input type="number" name="maxScore" value={form.maxScore} onChange={handleChange}
-                      className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                       placeholder="e.g. 100" required />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Term</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Term</label>
                     <input type="text" name="term" value={form.term} onChange={handleChange}
-                      className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                       placeholder="e.g. Term 1" required />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Exam Date</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Exam Date</label>
                     <input type="date" name="examDate" value={form.examDate} onChange={handleChange}
-                      className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                       required />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Remarks</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Remarks</label>
                     <input type="text" name="remarks" value={form.remarks} onChange={handleChange}
-                      className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                       placeholder="Optional remarks" />
                   </div>
                   <div className="sm:col-span-2 lg:col-span-3 flex gap-3">
@@ -294,7 +282,7 @@ const TeacherDashboard = () => {
                       {editingGrade ? 'Update Grade' : 'Add Grade'}
                     </button>
                     <button type="button" onClick={() => { setShowForm(false); setEditingGrade(null); }}
-                      className="flex items-center gap-2 bg-gray-200 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-300 transition">
+                      className="flex items-center gap-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-6 py-2 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition">
                       <X size={16} />
                       Cancel
                     </button>
@@ -304,8 +292,8 @@ const TeacherDashboard = () => {
             )}
 
             {studentId && (
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h3 className="text-lg font-semibold text-gray-800 mb-4">
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+                <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
                   Grades for {selectedStudent?.name}
                 </h3>
                 {loading ? (
@@ -313,11 +301,11 @@ const TeacherDashboard = () => {
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
                   </div>
                 ) : grades.length === 0 ? (
-                  <p className="text-center text-gray-400 py-8">No grades found for this student.</p>
+                  <p className="text-center text-gray-400 dark:text-gray-500 py-8">No grades found for this student.</p>
                 ) : (
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="text-left text-gray-500 border-b">
+                      <tr className="text-left text-gray-500 dark:text-gray-400 border-b dark:border-gray-700">
                         <th className="pb-3">Subject</th>
                         <th className="pb-3">Score</th>
                         <th className="pb-3">Term</th>
@@ -328,24 +316,24 @@ const TeacherDashboard = () => {
                     </thead>
                     <tbody>
                       {grades.map((grade) => (
-                        <tr key={grade.id} className="border-b last:border-0 hover:bg-gray-50">
-                          <td className="py-3 font-medium text-gray-800">{grade.subject}</td>
+                        <tr key={grade.id} className="border-b dark:border-gray-700 last:border-0 hover:bg-gray-50 dark:hover:bg-gray-700">
+                          <td className="py-3 font-medium text-gray-800 dark:text-white">{grade.subject}</td>
                           <td className="py-3">
                             <span className={`font-semibold ${(grade.score / grade.maxScore) * 100 >= 80 ? 'text-green-600' : (grade.score / grade.maxScore) * 100 >= 60 ? 'text-yellow-600' : 'text-red-600'}`}>
                               {grade.score}/{grade.maxScore}
                             </span>
                           </td>
-                          <td className="py-3 text-gray-500">{grade.term}</td>
-                          <td className="py-3 text-gray-500">{grade.examDate}</td>
-                          <td className="py-3 text-gray-400 italic">{grade.remarks || '-'}</td>
+                          <td className="py-3 text-gray-500 dark:text-gray-400">{grade.term}</td>
+                          <td className="py-3 text-gray-500 dark:text-gray-400">{grade.examDate}</td>
+                          <td className="py-3 text-gray-400 dark:text-gray-500 italic">{grade.remarks || '-'}</td>
                           <td className="py-3">
                             <div className="flex gap-2">
                               <button onClick={() => handleEdit(grade)}
-                                className="p-1.5 text-blue-600 hover:bg-blue-50 rounded transition">
+                                className="p-1.5 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded transition">
                                 <Pencil size={15} />
                               </button>
                               <button onClick={() => handleDelete(grade.id)}
-                                className="p-1.5 text-red-500 hover:bg-red-50 rounded transition">
+                                className="p-1.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded transition">
                                 <Trash2 size={15} />
                               </button>
                             </div>

@@ -37,5 +37,8 @@ export const getMySection = () => API.get('/sections/my-section');
 export const getMLAnalysis = (studentId) => API.get(`/grades/ml-analysis/${studentId}`);
 export const getMyMLAnalysis = () => API.get(`/grades/ml-analysis/me`);
 export const sendChatMessage = (message, context) => API.post('/chat', { message, context });
+export const getNotifications = () => API.get('/notifications');
+export const markNotificationsRead = () => API.put('/notifications/mark-read');
+export const clearAllNotifications = () => API.delete('/notifications');
 
 export default API;
