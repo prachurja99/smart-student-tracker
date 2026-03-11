@@ -203,7 +203,7 @@ const getMyMLAnalysis = async (req, res) => {
       examDate: g.examDate,
     }));
 
-    const mlResponse = await axios.post('http://127.0.0.1:5001/analyze', {
+    const mlResponse = await axios.post(`${process.env.ML_SERVICE_URL || 'http://127.0.0.1:5001'}/analyze`, {
       grades: gradeData,
     });
 
