@@ -28,14 +28,8 @@ An AI-powered student performance analytics platform built as a full-stack portf
 ![AI Chatbot](https://via.placeholder.com/1280x720/1e293b/a855f7?text=AI+Chatbot)
 > Context-aware academic guidance powered by Groq's llama-3.3-70b-versatile model.
 
-### 🌙 Dark / Light Mode
+### 🌙 Dark Mode
 ![Dark Mode](https://via.placeholder.com/1280x720/0f172a/e2e8f0?text=Dark+Mode)
-![Light Mode](https://via.placeholder.com/1280x720/f8fafc/1e293b?text=Light+Mode)
-> Full theme support across all pages, saved to localStorage.
-
-### 📱 Mobile Responsive
-![Mobile View](https://via.placeholder.com/390x844/1e293b/6366f1?text=Mobile+View)
-> Fully responsive layout optimized for screens from 320px and up.
 
 ---
 
@@ -295,5 +289,6 @@ Full dark mode support across all pages and components. Theme preference is save
 ## 📄 License
 
 This project is open source and available under the [MIT License](LICENSE).
+
 
 
