@@ -1,4 +1,3 @@
-import ChatBot from '../../components/dashboard/ChatBot';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import {
@@ -8,6 +7,7 @@ import {
 } from '../../services/api';
 import Navbar from '../../components/layout/Navbar';
 import { Users, GraduationCap, BookOpen, Clock, Check, X, ShieldCheck, Plus } from 'lucide-react';
+import ChatBot from '../../components/dashboard/ChatBot';
 
 const AdminDashboard = () => {
   const { user } = useAuth();
@@ -102,41 +102,41 @@ const AdminDashboard = () => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       <Navbar />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
 
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Admin Dashboard</h1>
-          <p className="text-gray-500 dark:text-gray-400 mt-1">Manage the entire Smart Student Tracker system</p>
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Admin Dashboard</h1>
+          <p className="text-gray-500 dark:text-gray-400 mt-1 text-sm sm:text-base">Manage the entire Smart Student Tracker system</p>
         </div>
 
-        {error && <div className="bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 p-3 rounded-lg mb-4">{error}</div>}
-        {success && <div className="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 p-3 rounded-lg mb-4">{success}</div>}
+        {error && <div className="bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 p-3 rounded-lg mb-4 text-sm">{error}</div>}
+        {success && <div className="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 p-3 rounded-lg mb-4 text-sm">{success}</div>}
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 flex items-center gap-4">
-            <div className="p-3 rounded-full bg-blue-500"><Users size={24} className="text-white" /></div>
-            <div><p className="text-sm text-gray-500 dark:text-gray-400">Total Users</p><p className="text-2xl font-bold text-gray-800 dark:text-white">{allUsers.length}</p></div>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-6 sm:mb-8">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 sm:p-6 flex items-center gap-3 sm:gap-4">
+            <div className="p-2 sm:p-3 rounded-full bg-blue-500"><Users size={20} className="text-white" /></div>
+            <div><p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Total Users</p><p className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white">{allUsers.length}</p></div>
           </div>
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 flex items-center gap-4">
-            <div className="p-3 rounded-full bg-green-500"><GraduationCap size={24} className="text-white" /></div>
-            <div><p className="text-sm text-gray-500 dark:text-gray-400">Students</p><p className="text-2xl font-bold text-gray-800 dark:text-white">{students.length}</p></div>
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 sm:p-6 flex items-center gap-3 sm:gap-4">
+            <div className="p-2 sm:p-3 rounded-full bg-green-500"><GraduationCap size={20} className="text-white" /></div>
+            <div><p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Students</p><p className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white">{students.length}</p></div>
           </div>
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 flex items-center gap-4">
-            <div className="p-3 rounded-full bg-yellow-500"><BookOpen size={24} className="text-white" /></div>
-            <div><p className="text-sm text-gray-500 dark:text-gray-400">Teachers</p><p className="text-2xl font-bold text-gray-800 dark:text-white">{teachers.length}</p></div>
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 sm:p-6 flex items-center gap-3 sm:gap-4">
+            <div className="p-2 sm:p-3 rounded-full bg-yellow-500"><BookOpen size={20} className="text-white" /></div>
+            <div><p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Teachers</p><p className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white">{teachers.length}</p></div>
           </div>
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 flex items-center gap-4">
-            <div className="p-3 rounded-full bg-red-500"><Clock size={24} className="text-white" /></div>
-            <div><p className="text-sm text-gray-500 dark:text-gray-400">Pending</p><p className="text-2xl font-bold text-gray-800 dark:text-white">{pendingTeachers.length}</p></div>
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 sm:p-6 flex items-center gap-3 sm:gap-4">
+            <div className="p-2 sm:p-3 rounded-full bg-red-500"><Clock size={20} className="text-white" /></div>
+            <div><p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Pending</p><p className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white">{pendingTeachers.length}</p></div>
           </div>
         </div>
 
-        <div className="flex gap-2 mb-6">
+        <div className="flex gap-2 mb-6 overflow-x-auto pb-1">
           {tabs.map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium capitalize transition ${
+              className={`px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium capitalize transition whitespace-nowrap ${
                 activeTab === tab
                   ? 'bg-blue-600 text-white'
                   : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
@@ -150,8 +150,8 @@ const AdminDashboard = () => {
         </div>
 
         {activeTab === 'overview' && (
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">System Overview</h3>
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 sm:p-6">
+            <h3 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-white mb-4">System Overview</h3>
             <div className="space-y-3 text-sm">
               <div className="flex justify-between py-2 border-b dark:border-gray-700">
                 <span className="text-gray-500 dark:text-gray-400">Logged in as</span>
@@ -175,9 +175,9 @@ const AdminDashboard = () => {
 
         {activeTab === 'sections' && (
           <div className="space-y-6">
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-              <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Create New Section</h3>
-              <form onSubmit={handleCreateSection} className="flex gap-3">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 sm:p-6">
+              <h3 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-white mb-4">Create New Section</h3>
+              <form onSubmit={handleCreateSection} className="flex flex-col sm:flex-row gap-3">
                 <input
                   type="text"
                   value={newSectionName}
@@ -188,7 +188,7 @@ const AdminDashboard = () => {
                 />
                 <button
                   type="submit"
-                  className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition text-sm"
+                  className="flex items-center justify-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition text-sm"
                 >
                   <Plus size={16} />
                   Create Section
@@ -203,9 +203,9 @@ const AdminDashboard = () => {
               </div>
             ) : (
               sections.map((section) => (
-                <div key={section.id} className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-gray-800 dark:text-white">{section.name}</h3>
+                <div key={section.id} className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 sm:p-6">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-1">
+                    <h3 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-white">{section.name}</h3>
                     <span className="text-sm text-gray-500 dark:text-gray-400">
                       Teacher: <span className="font-medium text-gray-800 dark:text-white">
                         {section.teacher ? section.teacher.name : 'Not assigned'}
@@ -213,7 +213,7 @@ const AdminDashboard = () => {
                     </span>
                   </div>
 
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Assign Teacher</label>
                       <select
@@ -271,102 +271,107 @@ const AdminDashboard = () => {
         )}
 
         {activeTab === 'users' && (
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">All Users</h3>
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="text-left text-gray-500 dark:text-gray-400 border-b dark:border-gray-700">
-                  <th className="pb-3">Name</th>
-                  <th className="pb-3">Email</th>
-                  <th className="pb-3">Role</th>
-                  <th className="pb-3">Status</th>
-                  <th className="pb-3">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {allUsers.map((u) => (
-                  <tr key={u.id} className="border-b dark:border-gray-700 last:border-0 hover:bg-gray-50 dark:hover:bg-gray-700">
-                    <td className="py-3 font-medium text-gray-800 dark:text-white">{u.name}</td>
-                    <td className="py-3 text-gray-500 dark:text-gray-400">{u.email}</td>
-                    <td className="py-3 capitalize text-gray-500 dark:text-gray-400">{u.role}</td>
-                    <td className="py-3">
-                      <span className={`text-xs font-semibold px-2 py-1 rounded-full ${statusColor[u.status]}`}>
-                        {u.status}
-                      </span>
-                    </td>
-                    <td className="py-3">
-                      {u.role !== 'admin' && u.id !== user.id && (
-                        <button
-                          onClick={() => handlePromote(u.id, u.name)}
-                          className="flex items-center gap-1 bg-purple-600 text-white px-3 py-1.5 rounded-lg text-xs hover:bg-purple-700 transition"
-                        >
-                          <ShieldCheck size={13} />
-                          Promote to Admin
-                        </button>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-
-        {activeTab === 'pending' && (
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Pending Teacher Requests</h3>
-            {pendingTeachers.length === 0 ? (
-              <p className="text-center text-gray-400 dark:text-gray-500 py-8">No pending requests.</p>
-            ) : (
-              <table className="w-full text-sm">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 sm:p-6">
+            <h3 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-white mb-4">All Users</h3>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm min-w-[500px]">
                 <thead>
                   <tr className="text-left text-gray-500 dark:text-gray-400 border-b dark:border-gray-700">
                     <th className="pb-3">Name</th>
                     <th className="pb-3">Email</th>
-                    <th className="pb-3">Requested On</th>
+                    <th className="pb-3">Role</th>
+                    <th className="pb-3">Status</th>
                     <th className="pb-3">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {pendingTeachers.map((teacher) => (
-                    <tr key={teacher.id} className="border-b dark:border-gray-700 last:border-0 hover:bg-gray-50 dark:hover:bg-gray-700">
-                      <td className="py-3 font-medium text-gray-800 dark:text-white">{teacher.name}</td>
-                      <td className="py-3 text-gray-500 dark:text-gray-400">{teacher.email}</td>
-                      <td className="py-3 text-gray-500 dark:text-gray-400">{new Date(teacher.createdAt).toLocaleDateString()}</td>
+                  {allUsers.map((u) => (
+                    <tr key={u.id} className="border-b dark:border-gray-700 last:border-0 hover:bg-gray-50 dark:hover:bg-gray-700">
+                      <td className="py-3 font-medium text-gray-800 dark:text-white">{u.name}</td>
+                      <td className="py-3 text-gray-500 dark:text-gray-400">{u.email}</td>
+                      <td className="py-3 capitalize text-gray-500 dark:text-gray-400">{u.role}</td>
                       <td className="py-3">
-                        <div className="flex gap-2">
+                        <span className={`text-xs font-semibold px-2 py-1 rounded-full ${statusColor[u.status]}`}>
+                          {u.status}
+                        </span>
+                      </td>
+                      <td className="py-3">
+                        {u.role !== 'admin' && u.id !== user.id && (
                           <button
-                            onClick={() => handleApprove(teacher.id)}
-                            className="flex items-center gap-1 bg-green-600 text-white px-3 py-1.5 rounded-lg text-xs hover:bg-green-700 transition"
+                            onClick={() => handlePromote(u.id, u.name)}
+                            className="flex items-center gap-1 bg-purple-600 text-white px-3 py-1.5 rounded-lg text-xs hover:bg-purple-700 transition"
                           >
-                            <Check size={13} />
-                            Approve
+                            <ShieldCheck size={13} />
+                            Promote
                           </button>
-                          <button
-                            onClick={() => handleReject(teacher.id)}
-                            className="flex items-center gap-1 bg-red-500 text-white px-3 py-1.5 rounded-lg text-xs hover:bg-red-600 transition"
-                          >
-                            <X size={13} />
-                            Reject
-                          </button>
-                        </div>
+                        )}
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'pending' && (
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 sm:p-6">
+            <h3 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-white mb-4">Pending Teacher Requests</h3>
+            {pendingTeachers.length === 0 ? (
+              <p className="text-center text-gray-400 dark:text-gray-500 py-8">No pending requests.</p>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm min-w-[400px]">
+                  <thead>
+                    <tr className="text-left text-gray-500 dark:text-gray-400 border-b dark:border-gray-700">
+                      <th className="pb-3">Name</th>
+                      <th className="pb-3">Email</th>
+                      <th className="pb-3">Requested On</th>
+                      <th className="pb-3">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {pendingTeachers.map((teacher) => (
+                      <tr key={teacher.id} className="border-b dark:border-gray-700 last:border-0 hover:bg-gray-50 dark:hover:bg-gray-700">
+                        <td className="py-3 font-medium text-gray-800 dark:text-white">{teacher.name}</td>
+                        <td className="py-3 text-gray-500 dark:text-gray-400">{teacher.email}</td>
+                        <td className="py-3 text-gray-500 dark:text-gray-400">{new Date(teacher.createdAt).toLocaleDateString()}</td>
+                        <td className="py-3">
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => handleApprove(teacher.id)}
+                              className="flex items-center gap-1 bg-green-600 text-white px-3 py-1.5 rounded-lg text-xs hover:bg-green-700 transition"
+                            >
+                              <Check size={13} />
+                              Approve
+                            </button>
+                            <button
+                              onClick={() => handleReject(teacher.id)}
+                              className="flex items-center gap-1 bg-red-500 text-white px-3 py-1.5 rounded-lg text-xs hover:bg-red-600 transition"
+                            >
+                              <X size={13} />
+                              Reject
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             )}
           </div>
         )}
       </div>
+
       <ChatBot context={{
-  role: 'admin',
-  totalUsers: allUsers.length,
-  totalStudents: students.length,
-  totalTeachers: teachers.length,
-  totalSections: sections.length,
-  pendingTeachers: pendingTeachers.length,
-}} />
+        role: 'admin',
+        totalUsers: allUsers.length,
+        totalStudents: students.length,
+        totalTeachers: teachers.length,
+        totalSections: sections.length,
+        pendingTeachers: pendingTeachers.length,
+      }} />
     </div>
   );
 };

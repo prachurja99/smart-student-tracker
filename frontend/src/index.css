@@ -7,3 +7,9 @@
     @apply bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors duration-300;
   }
 }
+
+@layer utilities {
+  .table-responsive {
+    @apply w-full overflow-x-auto;
+  }
+}

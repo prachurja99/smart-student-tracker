@@ -9,13 +9,13 @@ import { TrendingUp, BookOpen, Award, BarChart2, Download } from 'lucide-react';
 import { generateStudentReport } from '../../utils/generateReport';
 
 const StatCard = ({ title, value, icon: Icon, color }) => (
-  <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 flex items-center gap-4">
+  <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 sm:p-6 flex items-center gap-4">
     <div className={`p-3 rounded-full ${color}`}>
-      <Icon size={24} className="text-white" />
+      <Icon size={22} className="text-white" />
     </div>
     <div>
-      <p className="text-sm text-gray-500 dark:text-gray-400">{title}</p>
-      <p className="text-2xl font-bold text-gray-800 dark:text-white">{value}</p>
+      <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">{title}</p>
+      <p className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white">{value}</p>
     </div>
   </div>
 );
@@ -52,9 +52,7 @@ const StudentDashboard = () => {
     }
   };
 
-  useEffect(() => {
-    fetchAllData();
-  }, [user]);
+  useEffect(() => { fetchAllData(); }, [user]);
 
   useEffect(() => {
     const handleGradeUpdated = () => fetchAllData();
@@ -97,31 +95,31 @@ const StudentDashboard = () => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       <Navbar />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
 
-        <div className="mb-8 flex items-center justify-between">
+        <div className="mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Welcome back, {user?.name}</h1>
-            <p className="text-gray-500 dark:text-gray-400 mt-1">Here is your academic performance overview</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Welcome back, {user?.name}</h1>
+            <p className="text-gray-500 dark:text-gray-400 mt-1 text-sm sm:text-base">Here is your academic performance overview</p>
             {section ? (
-              <div className="mt-3 inline-flex items-center gap-2 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-lg px-4 py-2">
-                <span className="text-sm text-blue-700 dark:text-blue-300 font-medium">Section: {section.name}</span>
+              <div className="mt-3 inline-flex items-center gap-2 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-lg px-3 py-1.5">
+                <span className="text-xs sm:text-sm text-blue-700 dark:text-blue-300 font-medium">Section: {section.name}</span>
                 {section.teacher && (
-                  <span className="text-sm text-blue-500 dark:text-blue-400">| Teacher: {section.teacher.name}</span>
+                  <span className="text-xs sm:text-sm text-blue-500 dark:text-blue-400">| Teacher: {section.teacher.name}</span>
                 )}
               </div>
             ) : (
-              <div className="mt-3 inline-flex items-center gap-2 bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-700 rounded-lg px-4 py-2">
-                <span className="text-sm text-yellow-700 dark:text-yellow-300">Not assigned to any section yet</span>
+              <div className="mt-3 inline-flex items-center gap-2 bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-700 rounded-lg px-3 py-1.5">
+                <span className="text-xs sm:text-sm text-yellow-700 dark:text-yellow-300">Not assigned to any section yet</span>
               </div>
             )}
           </div>
           {analytics && (
             <button
               onClick={handleDownloadReport}
-              className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
+              className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition text-sm w-full sm:w-auto justify-center"
             >
-              <Download size={18} />
+              <Download size={16} />
               Download Report
             </button>
           )}
@@ -135,50 +133,52 @@ const StudentDashboard = () => {
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-6 sm:mb-8">
               <StatCard title="Overall Average" value={`${analytics.overallAverage}%`} icon={TrendingUp} color="bg-blue-500" />
               <StatCard title="Total Grades" value={analytics.totalGrades} icon={BookOpen} color="bg-green-500" />
               <StatCard title="Best Subject" value={analytics.subjectAverages.reduce((a, b) => a.average > b.average ? a : b).subject} icon={Award} color="bg-yellow-500" />
-              <StatCard title="Subjects Tracked" value={analytics.subjectAverages.length} icon={BarChart2} color="bg-purple-500" />
+              <StatCard title="Subjects" value={analytics.subjectAverages.length} icon={BarChart2} color="bg-purple-500" />
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-4 sm:mb-6">
               <SubjectBarChart data={analytics.subjectAverages} />
               <GradeTrendChart data={analytics.grades} />
             </div>
 
-            <div className="mb-6">
+            <div className="mb-4 sm:mb-6">
               <RiskCard analysis={mlAnalysis} loading={mlLoading} />
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
               <SubjectPieChart data={analytics.subjectAverages} />
-              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-                <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Recent Grades</h3>
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="text-left text-gray-500 dark:text-gray-400 border-b dark:border-gray-700">
-                      <th className="pb-3">Subject</th>
-                      <th className="pb-3">Score</th>
-                      <th className="pb-3">Term</th>
-                      <th className="pb-3">Date</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {analytics.grades.map((grade) => (
-                      <tr key={grade.id} className="border-b dark:border-gray-700 last:border-0 hover:bg-gray-50 dark:hover:bg-gray-700">
-                        <td className="py-3 font-medium text-gray-800 dark:text-white">{grade.subject}</td>
-                        <td className="py-3">
-                          <span className={`font-semibold ${(grade.score / grade.maxScore) * 100 >= 80 ? 'text-green-600' : (grade.score / grade.maxScore) * 100 >= 60 ? 'text-yellow-600' : 'text-red-600'}`}>
-                            {grade.score}/{grade.maxScore}
-                          </span>
-                        </td>
-                        <td className="py-3 text-gray-500 dark:text-gray-400">{grade.term}</td>
-                        <td className="py-3 text-gray-500 dark:text-gray-400">{grade.examDate}</td>
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 sm:p-6">
+                <h3 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-white mb-4">Recent Grades</h3>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm min-w-[400px]">
+                    <thead>
+                      <tr className="text-left text-gray-500 dark:text-gray-400 border-b dark:border-gray-700">
+                        <th className="pb-3">Subject</th>
+                        <th className="pb-3">Score</th>
+                        <th className="pb-3">Term</th>
+                        <th className="pb-3">Date</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {analytics.grades.map((grade) => (
+                        <tr key={grade.id} className="border-b dark:border-gray-700 last:border-0 hover:bg-gray-50 dark:hover:bg-gray-700">
+                          <td className="py-3 font-medium text-gray-800 dark:text-white">{grade.subject}</td>
+                          <td className="py-3">
+                            <span className={`font-semibold ${(grade.score / grade.maxScore) * 100 >= 80 ? 'text-green-600' : (grade.score / grade.maxScore) * 100 >= 60 ? 'text-yellow-600' : 'text-red-600'}`}>
+                              {grade.score}/{grade.maxScore}
+                            </span>
+                          </td>
+                          <td className="py-3 text-gray-500 dark:text-gray-400">{grade.term}</td>
+                          <td className="py-3 text-gray-500 dark:text-gray-400">{grade.examDate}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </>
