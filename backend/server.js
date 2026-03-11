@@ -91,5 +91,16 @@ const startServer = async () => {
     console.log(`Server running on port ${PORT}`);
   });
 };
+// Keep ML service alive
+const keepAlive = () => {
+  const http = require('https');
+  http.get('https://smart-student-tracker-ml.onrender.com/health', (res) => {
+    console.log('ML service ping:', res.statusCode);
+  }).on('error', () => {
+    console.log('ML service ping failed');
+  });
+};
+
+setInterval(keepAlive, 840000); // ping every 14 minutes
 
 startServer();
