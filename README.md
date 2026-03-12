@@ -28,9 +28,9 @@ An AI-powered student performance analytics platform built as a full-stack portf
 
 ---
 
-## ✨ Features
+##  Features
 
-### 👨‍🎓 Student
+###  Student
 - View personal grade analytics with charts
 - ML-powered academic risk assessment (Green / Yellow / Red)
 - Real-time grade notifications via Socket.IO
@@ -40,7 +40,7 @@ An AI-powered student performance analytics platform built as a full-stack portf
 - Dark / Light mode
 - Fully responsive on mobile
 
-### 👨‍🏫 Teacher
+###  Teacher
 - Manage grades for assigned students (Add / Edit / Delete)
 - View student analytics and ML risk analysis
 - Real-time updates when grades are modified
@@ -48,7 +48,7 @@ An AI-powered student performance analytics platform built as a full-stack portf
 - Download student PDF reports
 - Section-based student management
 
-### 🛡️ Admin
+###  Admin
 - Approve or reject teacher registration requests
 - Manage all users across the system
 - Create sections and assign teachers and students
@@ -58,7 +58,7 @@ An AI-powered student performance analytics platform built as a full-stack portf
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 ### Frontend
 - React (Vite)
@@ -98,7 +98,7 @@ An AI-powered student performance analytics platform built as a full-stack portf
 
 ---
 
-## 🏗️ Architecture
+##  Architecture
 
 ```
 smart-student-tracker/
@@ -114,7 +114,7 @@ smart-student-tracker/
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites
 - Node.js v18+
@@ -175,7 +175,7 @@ npm run dev
 
 ---
 
-## 🔑 API Endpoints
+##  API Endpoints
 
 ### Auth
 | Method | Endpoint | Description |
@@ -225,7 +225,7 @@ npm run dev
 
 ---
 
-## 🤖 ML Risk Analysis
+##  ML Risk Analysis
 
 The Python microservice analyzes student performance and returns a risk level:
 
@@ -243,7 +243,7 @@ The Python microservice analyzes student performance and returns a risk level:
 
 ---
 
-## 🔒 Role-Based Access Control
+##  Role-Based Access Control
 
 | Feature | Student | Teacher | Admin |
 |---------|---------|---------|-------|
@@ -259,7 +259,7 @@ The Python microservice analyzes student performance and returns a risk level:
 
 ---
 
-## 📱 Responsive Design
+##  Responsive Design
 
 The app is fully responsive and works on:
 - Desktop (1280px+)
@@ -268,13 +268,13 @@ The app is fully responsive and works on:
 
 ---
 
-## 🌙 Dark Mode
+##  Dark Mode
 
 Full dark mode support across all pages and components. Theme preference is saved in localStorage.
 
 ---
 
-## 🙌 Author
+##  Author
 
 **Prachurja Bhattacharjee**
 - GitHub: [@prachurja99](https://github.com/prachurja99)
@@ -284,6 +284,7 @@ Full dark mode support across all pages and components. Theme preference is save
 ## 📄 License
 
 This project is open source and available under the [MIT License](LICENSE).
+
 
 
 
