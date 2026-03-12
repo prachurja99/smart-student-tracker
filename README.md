@@ -1,4 +1,4 @@
-# 🎓 Smart Student Tracker
+#  Smart Student Tracker
 
 An AI-powered student performance analytics platform built as a full-stack portfolio project. Features real-time notifications, machine learning risk analysis, an AI chatbot, PDF report generation, and a fully responsive dark/light mode UI.
 
@@ -284,6 +284,7 @@ Full dark mode support across all pages and components. Theme preference is save
 ## 📄 License
 
 This project is open source and available under the [MIT License](LICENSE).
+
 
 
 
